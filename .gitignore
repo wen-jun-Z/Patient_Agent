@@ -19,6 +19,12 @@ results/
 *.key
 *_api_key.txt
 
+# Streamlit config (may contain sensitive info)
+.streamlit/secrets.toml
+
+# Scripts with hardcoded API keys
+demo/run.sh
+
 # IDE
 .vscode/
 .idea/

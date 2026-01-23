@@ -198,6 +198,9 @@ def standard_openai_response(message: list, model="gpt-4o", temperature=0, seed=
     """
     # 统一获取/覆盖模型名，防止重复传参导致 multiple values
     model = kwargs.pop("model", model)
+    # 从 kwargs 中提取 temperature 和 seed（如果存在）
+    temperature = kwargs.pop("temperature", temperature)
+    seed = kwargs.pop("seed", seed)
     time.sleep(time_gap.get(model, 1))  # 稍微休眠一下防止超频
     
     # 选择客户端：优先使用调用传入的 api_key/base_url，否则用全局 standard_client
