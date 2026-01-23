@@ -4,10 +4,10 @@
 
 ## 功能特性
 
-- 🤖 支持多种 LLM API（DeepSeek、Qwen、OpenAI、Azure OpenAI、Gemini、vLLM）
-- 👨‍⚕️ 医生 Agent：问诊、收集信息、给出诊断
-- 👤 患者 Agent：模拟不同性格、语言水平、记忆能力的患者
-- 📊 完整的对话记录和 Token 统计
+- 支持多种 LLM API（DeepSeek、Qwen、OpenAI、Azure OpenAI、Gemini、vLLM）
+- 医生 Agent：问诊、收集信息、给出诊断
+- 患者 Agent：模拟不同性格、语言水平、记忆能力的患者
+- 完整的对话记录和 Token 统计
 
 ## 项目结构
 
