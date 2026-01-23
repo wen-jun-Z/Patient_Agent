@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Results and logs
+results/
+*.log
+*.jsonl
+
+# Environment variables and secrets
+.env
+.env.local
+*.key
+*_api_key.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data files (if too large, uncomment)
+# src/data/final_data/patient_profile.json
+
+# Temporary files
+*.tmp
+*.bak
+*.cache
