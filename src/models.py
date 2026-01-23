@@ -2,12 +2,20 @@ import os
 import time
 import json
 import datetime
-from google import genai
 from dotenv import load_dotenv
-
-from google.genai import types
-from google.genai.types import HttpOptions
 from openai import AzureOpenAI, OpenAI
+
+# 可选导入 Google GenAI（仅在使用 Gemini API 时需要）
+try:
+    from google import genai
+    from google.genai import types
+    from google.genai.types import HttpOptions
+    GOOGLE_GENAI_AVAILABLE = True
+except ImportError:
+    GOOGLE_GENAI_AVAILABLE = False
+    genai = None
+    types = None
+    HttpOptions = None
 
 # load_dotenv(override=True)
 GENAI_API_KEY = os.environ.get("GENAI_API_KEY", "")
@@ -16,6 +24,7 @@ AZURE_ENDPOINT = os.environ.get("AZURE_ENDPOINT", "")
 PORT = os.environ.get("VLLM_PORT", "")
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "./google_credentials.json")
 
+azure_client = None
 if AZURE_OPENAI_KEY != "":
     azure_client = AzureOpenAI(
         azure_endpoint=AZURE_ENDPOINT,
@@ -23,7 +32,8 @@ if AZURE_OPENAI_KEY != "":
         api_version="2024-10-21",
     )
 
-if GENAI_API_KEY != "":
+gen_client = None
+if GENAI_API_KEY != "" and GOOGLE_GENAI_AVAILABLE:
     gen_client = genai.Client(vertexai=True, api_key=GENAI_API_KEY, http_options=HttpOptions(api_version="v1"))
 
 # ======= 【插入】标准 OpenAI 兼容客户端初始化 (兼容 DeepSeek/Qwen/OpenAI) =======
@@ -90,6 +100,9 @@ def gpt_azure_response(message: list, model="gpt-4o", temperature=0, seed=42, **
 
 
 def gemini_response(message: list, model="gemini-2.0-flash", temperature=0, seed=42, **kwargs):
+    if not GOOGLE_GENAI_AVAILABLE or gen_client is None:
+        raise ImportError("Google GenAI is not available. Please install google-genai package or use a different API.")
+    
     time.sleep(time_gap.get(model, 3))
     system_prompt = message[0]["content"] if message[0]["role"] == "system" else None
     if system_prompt:
