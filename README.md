@@ -56,6 +56,3 @@ python run_simulation.py \
 
 详细配置请参考 `src/config/base.yaml`
 
-## 许可证
-
-[添加你的许可证]
