@@ -131,25 +131,25 @@ if openai_api_key:
 # ======= 插入结束 =======
 
 CEFR_DICT = {
-    "A": "Beginner\n\tCan make simple sentences.",
-    "B": "Intermediate\n\tCan have daily conversations.",
-    "C": "Advanced\n\tCan freely use even advanced medical terms.",
+    "A": "初级\n\t能说简单句子。",
+    "B": "中级\n\t能进行日常对话。",
+    "C": "高级\n\t能自由使用甚至高级医学术语。",
 }
 
 PERSONALITY_DICT = {
-    "plain": "Neutral\n\tNo strong emotions or noticeable behavior.",
-    "verbose": "Talkative\n\tSpeaks a lot, and provides highly detailed responses.",
-    "distrust": "Distrustful\n\tQuestions the doctor’s expertise and care.",
-    "pleasing": "Pleasing\n\tOverly positive and tend to minimize their problems.",
-    "impatient": "Impatient\n\tEasily irritated and lacks patience.",
-    "overanxious": "Overanxious\n\tExpresses concern beyond what is typical.",
+    "plain": "中性\n\t无明显情绪或特殊行为。",
+    "verbose": "健谈\n\t话多，回答非常详细。",
+    "distrust": "多疑\n\t质疑医生的专业和关怀。",
+    "pleasing": "讨好型\n\t过于积极，倾向于淡化自己的问题。",
+    "impatient": "急躁\n\t易怒，缺乏耐心。",
+    "overanxious": "过度焦虑\n\t表现出超出寻常的担忧。",
 }
 
-RECALL_DICT = {"low": "\n\tOften forgetting even major medical events.", "high": "\n\tUsually recalls their medical events accurately."}
+RECALL_DICT = {"low": "\n\t经常遗忘重要医疗事件。", "high": "\n\t通常能准确回忆医疗事件。"}
 
 DAZED_DICT = {
-    "normal": "\n\tClear mental status, with naturally reflect their own persona.",
-    "high": "\n\tHighly dazed and extremely confused, struggle with conversation.",
+    "normal": "\n\t神志清醒，自然反映自身人设。",
+    "high": "\n\t非常迷糊、极度困惑，难以正常对话。",
 }
 
 ###########################
@@ -200,15 +200,15 @@ def render_chat_html():
     if not chat_history:
         html_content = """
         <div style="text-align: center; padding: 2rem; color: #6c757d;">
-            <h3 style="color: #495057; margin-bottom: 1rem;">💬 Consultation History</h3>
-            <p style="font-style: italic;">No messages yet. Start the conversation!</p>
+            <h3 style="color: #495057; margin-bottom: 1rem;">💬 问诊记录</h3>
+            <p style="font-style: italic;">暂无消息。开始对话吧！</p>
         </div>
         """
     else:
         html_content = """
         <div style="margin-bottom: 1.5rem;">
             <h3 style="color: #1f4788; border-bottom: 2px solid #4a90e2; padding-bottom: 0.5rem; margin-bottom: 1rem;">
-                💬 Consultation History
+                💬 问诊记录
             </h3>
         </div>
         """
@@ -219,7 +219,7 @@ def render_chat_html():
                             border-radius: 12px; border-left: 4px solid #2196f3; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                     <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
                         <span style="background: #2196f3; color: white; padding: 0.25rem 0.75rem; border-radius: 20px; 
-                                     font-weight: 600; font-size: 12px; margin-right: 0.5rem;">👨‍⚕️ DOCTOR</span>
+                                     font-weight: 600; font-size: 12px; margin-right: 0.5rem;">👨‍⚕️ 医生</span>
                     </div>
                     <p style="margin: 0; color: #1565c0; line-height: 1.6;">{msg['content']}</p>
                 </div>
@@ -230,7 +230,7 @@ def render_chat_html():
                             border-radius: 12px; border-left: 4px solid #ff9800; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                     <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
                         <span style="background: #ff9800; color: white; padding: 0.25rem 0.75rem; border-radius: 20px; 
-                                     font-weight: 600; font-size: 12px; margin-right: 0.5rem;">👤 PATIENT</span>
+                                     font-weight: 600; font-size: 12px; margin-right: 0.5rem;">👤 患者</span>
                     </div>
                     <p style="margin: 0; color: #e65100; line-height: 1.6;">{msg['content']}</p>
                 </div>
@@ -262,8 +262,8 @@ def patient_selection_page():
     <div style="text-align: center; margin-bottom: 2rem;">
         <h1 style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                    -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-                   font-size: 2.5rem; margin-bottom: 0.5rem;">🏥 Patient Profile Configuration</h1>
-        <p style="color: #6c757d; font-size: 1.1rem;">Configure patient information and persona for simulation</p>
+                   font-size: 2.5rem; margin-bottom: 0.5rem;">🏥 患者档案配置</h1>
+        <p style="color: #6c757d; font-size: 1.1rem;">配置患者信息与人设以进行模拟</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -274,52 +274,52 @@ def patient_selection_page():
     display_options_to_hadm = {}  # mapping: "age:..../gender:.../disease:..." → patient info
     for hadm_id in sorted(patient_info_dict.keys()):
         info = patient_info_dict[hadm_id]
-        display_str = f"age: {info['age']} / gender: {info['gender']} / disease: {info.get('diagnosis', 'Unknown')}"
+        display_str = f"年龄: {info['age']} / 性别: {info['gender']} / 诊断: {info.get('diagnosis', '未知')}"
         display_options_to_hadm[display_str] = hadm_id
 
     # Select box to show results with card styling
     st.markdown("""
     <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
                 padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h3 style="color: #1f4788; margin-top: 0;">👤 Select a Patient</h3>
+        <h3 style="color: #1f4788; margin-top: 0;">👤 选择患者</h3>
     </div>
     """, unsafe_allow_html=True)
     
-    selected_display = st.selectbox("Select Patient", display_options_to_hadm.keys(), label_visibility="collapsed")
+    selected_display = st.selectbox("选择患者", display_options_to_hadm.keys(), label_visibility="collapsed")
     base_patient = patient_info_dict[display_options_to_hadm[selected_display]]
 
     st.markdown("""
     <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
                 padding: 1.5rem; border-radius: 12px; margin: 2rem 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h3 style="color: #1f4788; margin-top: 0;">⚙️ Customize Patient Persona</h3>
+        <h3 style="color: #1f4788; margin-top: 0;">⚙️ 自定义患者人设</h3>
     </div>
     """, unsafe_allow_html=True)
 
     cefr = st.radio(
-        "📚 Select CEFR Level", 
+        "📚 选择语言水平（CEFR）", 
         options=list(CEFR_DICT.keys()), 
-        format_func=lambda k: f"{k.capitalize()} : {CEFR_DICT[k]}",
+        format_func=lambda k: f"{k}：{CEFR_DICT[k]}",
         horizontal=False
     )
 
     personality = st.radio(
-        "🎭 Select Personality", 
+        "🎭 选择性格", 
         options=list(PERSONALITY_DICT.keys()), 
-        format_func=lambda k: f"{k.capitalize()}: {PERSONALITY_DICT[k]}",
+        format_func=lambda k: f"{k}：{PERSONALITY_DICT[k]}",
         horizontal=False
     )
 
     recall_level = st.radio(
-        "🧠 Select Recall Level", 
+        "🧠 选择记忆水平", 
         options=list(RECALL_DICT.keys()), 
-        format_func=lambda k: f"{k.capitalize()}: {RECALL_DICT[k]}",
+        format_func=lambda k: f"{k}：{RECALL_DICT[k]}",
         horizontal=False
     )
 
     dazed_level = st.radio(
-        "😵 Select Dazed Level", 
+        "😵 选择迷糊程度", 
         options=list(DAZED_DICT.keys()), 
-        format_func=lambda k: f"{k.capitalize()}: {DAZED_DICT[k]}",
+        format_func=lambda k: f"{k}：{DAZED_DICT[k]}",
         horizontal=False
     )
 
@@ -327,7 +327,7 @@ def patient_selection_page():
     
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        if st.button("🚀 Start Simulation", use_container_width=True, type="primary"):
+        if st.button("🚀 开始模拟", use_container_width=True, type="primary"):
             base_patient["cefr"] = cefr
             base_patient["personality"] = personality
             base_patient["recall_level"] = recall_level
@@ -343,16 +343,16 @@ def demo_page():
     <div style="text-align: center; margin-bottom: 2rem;">
         <h1 style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                    -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-                   font-size: 2.5rem; margin-bottom: 0.5rem;">🏥 ED Consultation Simulation</h1>
-        <p style="color: #6c757d; font-size: 1.1rem;">Interactive patient-doctor dialogue simulation</p>
+                   font-size: 2.5rem; margin-bottom: 0.5rem;">🏥 急诊问诊模拟</h1>
+        <p style="color: #6c757d; font-size: 1.1rem;">医患对话交互模拟</p>
     </div>
     """, unsafe_allow_html=True)
     
     selected_patient_profile = st.session_state.get("selected_patient", None)
 
     if selected_patient_profile is None:
-        st.error("No patient selected. Please go back to the patient selection page.")
-        if st.button("Go to Patient Selection"):
+        st.error("未选择患者。请返回患者选择页面。")
+        if st.button("前往患者选择"):
             reset_to_patient_selection()
         return
     
@@ -438,31 +438,31 @@ def demo_page():
 
     top_cols = st.columns([3, 1])
     with top_cols[-1]:
-        if st.button("Return to Patient Selection", use_container_width=True):
+        if st.button("返回患者选择", use_container_width=True):
             reset_to_patient_selection()
 
     # Layout: Two columns (left for patient info, right for conversation)
     cols = st.columns([2, 3])
-    patient_info_height = st.sidebar.slider("Adjust Patient Info Height", min_value=400, max_value=1000, value=650)
+    patient_info_height = st.sidebar.slider("调整患者信息区域高度", min_value=400, max_value=1000, value=650)
     with cols[0]:
         basic_info_html = f"""
         <div style="margin-bottom: 1.5rem; padding: 1rem; background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); 
                     border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
             <h3 style="margin-top: 0px; margin-bottom: 1rem; color: #1565c0; border-bottom: 2px solid #2196f3; padding-bottom: 0.5rem;">
-                📋 Patient's Basic Information
+                📋 患者基本信息
             </h3>
             <div style="line-height: 2;">
                 <div style="margin-bottom: 0.75rem;">
-                    <span style="font-weight: 600; color: #1976d2;">👤 Age:</span> 
-                    <span style="color: #424242;">{selected_patient_profile.get('age', 'N/A')}</span>
+                    <span style="font-weight: 600; color: #1976d2;">👤 年龄：</span> 
+                    <span style="color: #424242;">{selected_patient_profile.get('age', '暂无')}</span>
                 </div>
                 <div style="margin-bottom: 0.75rem;">
-                    <span style="font-weight: 600; color: #1976d2;">⚧️ Gender:</span> 
-                    <span style="color: #424242;">{selected_patient_profile.get('gender', 'N/A')}</span>
+                    <span style="font-weight: 600; color: #1976d2;">⚧️ 性别：</span> 
+                    <span style="color: #424242;">{selected_patient_profile.get('gender', '暂无')}</span>
                 </div>
                 <div style="margin-bottom: 0.75rem;">
-                    <span style="font-weight: 600; color: #1976d2;">🚑 Arrival transport:</span> 
-                    <span style="color: #424242;">{selected_patient_profile.get('arrival_transport', 'N/A')}</span>
+                    <span style="font-weight: 600; color: #1976d2;">🚑 到达方式：</span> 
+                    <span style="color: #424242;">{selected_patient_profile.get('arrival_transport', '暂无')}</span>
                 </div>
             </div>
         </div>
@@ -471,24 +471,24 @@ def demo_page():
         <div style="margin-bottom: 0px; margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); 
                     border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); line-height:1.6;">
             <h3 style="margin-top: 0px; margin-bottom: 1rem; color: #e65100; border-bottom: 2px solid #ff9800; padding-bottom: 0.5rem;">
-                🎭 Patient's Persona
+                🎭 患者人设
             </h3>
             <div style="line-height: 2;">
                 <div style="margin-bottom: 0.75rem;">
-                    <span style="font-weight: 600; color: #f57c00;">📚 Language proficiency:</span> 
-                    <span style="color: #424242;">{CEFR_DICT[selected_patient_profile.get('cefr', 'N/A')]}</span>
+                    <span style="font-weight: 600; color: #f57c00;">📚 语言水平：</span> 
+                    <span style="color: #424242;">{CEFR_DICT[selected_patient_profile.get('cefr', 'A')]}</span>
                 </div>
                 <div style="margin-bottom: 0.75rem;">
-                    <span style="font-weight: 600; color: #f57c00;">🎨 Personality:</span> 
-                    <span style="color: #424242;">{PERSONALITY_DICT[selected_patient_profile.get('personality', 'N/A')]}</span>
+                    <span style="font-weight: 600; color: #f57c00;">🎨 性格：</span> 
+                    <span style="color: #424242;">{PERSONALITY_DICT[selected_patient_profile.get('personality', 'plain')]}</span>
                 </div>
                 <div style="margin-bottom: 0.75rem;">
-                    <span style="font-weight: 600; color: #f57c00;">🧠 Medical History Recall Level:</span> 
-                    <span style="color: #424242;">{RECALL_DICT[selected_patient_profile.get('recall_level', 'N/A')]}</span>
+                    <span style="font-weight: 600; color: #f57c00;">🧠 病史记忆水平：</span> 
+                    <span style="color: #424242;">{RECALL_DICT[selected_patient_profile.get('recall_level', 'high')]}</span>
                 </div>
                 <div style="margin-bottom: 0.75rem;">
-                    <span style="font-weight: 600; color: #f57c00;">😵 Dazed Level:</span> 
-                    <span style="color: #424242;">{DAZED_DICT[selected_patient_profile.get('dazed_level', 'N/A')]}</span>
+                    <span style="font-weight: 600; color: #f57c00;">😵 迷糊程度：</span> 
+                    <span style="color: #424242;">{DAZED_DICT[selected_patient_profile.get('dazed_level', 'normal')]}</span>
                 </div>
             </div>
         </div>
@@ -505,7 +505,7 @@ def demo_page():
 
         btn_cols = st.columns(2)
         if not st.session_state.get("chat_saved", False):
-            if btn_cols[0].button("Reset Conversation", key="reset_demo"):
+            if btn_cols[0].button("重置对话", key="reset_demo"):
                 st.session_state.chat_history = []
                 st.session_state.patient_agent.reset()
                 st.rerun()
@@ -528,20 +528,20 @@ def demo_page():
         st.markdown("""
         <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
                     padding: 1rem; border-radius: 12px; margin-top: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-            <h4 style="color: #1f4788; margin-top: 0; margin-bottom: 0.5rem;">💬 Enter Doctor's Message</h4>
+            <h4 style="color: #1f4788; margin-top: 0; margin-bottom: 0.5rem;">💬 输入医生消息</h4>
         </div>
         """, unsafe_allow_html=True)
         
         with st.form(key="chat_form", clear_on_submit=True):
-            doctor_message = st.text_input("Doctor Message", placeholder="Type your message here...", label_visibility="collapsed")
-            submitted = st.form_submit_button("📤 Send Message", use_container_width=True, type="primary")
+            doctor_message = st.text_input("医生消息", placeholder="在此输入您的消息...", label_visibility="collapsed")
+            submitted = st.form_submit_button("📤 发送消息", use_container_width=True, type="primary")
 
         if submitted and doctor_message:
             if len(st.session_state.chat_history) == 0:
                 st.session_state.conversation_start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
             add_message("Doctor", doctor_message)
-            with st.spinner("🤔 Patient agent is generating a response..."):
+            with st.spinner("🤔 患者代理正在生成回复..."):
                 try:
                     # 添加调试输出
                     agent = st.session_state.patient_agent
@@ -597,7 +597,7 @@ def main():
 
 if __name__ == "__main__":
     st.set_page_config(
-        page_title="Patient Simulation Demo",
+        page_title="患者模拟演示",
         page_icon="🏥",
         layout="wide",
         initial_sidebar_state="expanded"
