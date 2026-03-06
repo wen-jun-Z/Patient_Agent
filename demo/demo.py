@@ -391,13 +391,14 @@ def demo_page():
         patient_model = patient_config.get("model_name", config.get("model", "qwen-max"))
         patient_api_type = patient_config.get("api_type", config.get("backend_api_type", "qwen"))
         patient_temperature = patient_config.get("temperature", 0.7)
-        patient_api_base = patient_config.get("api_base", "https://api.siliconflow.cn/v1")
+        patient_api_base = patient_config.get("api_base", "https://api.deepseek.com/v1")
         
-        # 获取 API key（从环境变量）
-        qwen_api_key = os.getenv("QWEN_API_KEY", "")
-        if not qwen_api_key:
-            st.error("❌ 错误：未设置 QWEN_API_KEY 环境变量！")
-            st.info("💡 请在服务器上运行以下命令设置环境变量：\n```bash\nexport QWEN_API_KEY='你的API密钥'\n```")
+        # 获取 API key（根据 api_type 选择对应环境变量）
+        api_key_env = {"deepseek": "DEEPSEEK_API_KEY", "qwen": "QWEN_API_KEY", "gpt": "OPENAI_API_KEY"}.get(patient_api_type, "DEEPSEEK_API_KEY")
+        api_key = os.getenv(api_key_env, "")
+        if not api_key:
+            st.error(f"❌ 错误：未设置 {api_key_env} 环境变量！")
+            st.info(f"💡 请在服务器上运行以下命令设置环境变量：\n```bash\nexport {api_key_env}='你的API密钥'\n```")
             st.stop()
         
         # 构建 client_params，包含 API 配置
@@ -405,7 +406,7 @@ def demo_page():
         client_params = {
             "temperature": patient_temperature,
             "seed": config["random_seed"],  # 改为 seed，匹配函数参数名
-            "api_key": qwen_api_key,
+            "api_key": api_key,
             "base_url": patient_api_base,
         }
         
@@ -416,8 +417,8 @@ def demo_page():
                 "patient_api_type": patient_api_type,
                 "patient_temperature": patient_temperature,
                 "patient_api_base": patient_api_base,
-                "api_key_set": bool(qwen_api_key),
-                "api_key_prefix": qwen_api_key[:10] + "..." if qwen_api_key else "未设置",
+                "api_key_set": bool(api_key),
+                "api_key_prefix": api_key[:10] + "..." if api_key else "未设置",
                 "client_params": {k: (v[:20] + "..." if isinstance(v, str) and len(v) > 20 else v) for k, v in client_params.items()}
             })
         
