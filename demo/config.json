@@ -14,9 +14,9 @@
     "temperature": 0.2
   },
   "patient": {
-    "model_name": "Pro/zai-org/GLM-4.7",
-    "api_type": "qwen",
-    "api_base": "https://api.siliconflow.cn/v1",
+    "model_name": "deepseek-chat",
+    "api_type": "deepseek",
+    "api_base": "https://api.deepseek.com/v1",
     "temperature": 0.7
   },
   
